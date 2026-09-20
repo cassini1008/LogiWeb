@@ -4,33 +4,32 @@ import java.time.LocalDate;
 
 public class EnvioTerrestre extends Envio {
 
-    private String placaVehiculo;
+    private Vehiculo vehiculo;    
     private double distanciaKm;
-    private final double tarifaBase;
+    private static final double TARIFA_BASE = 2.50;
 
     public EnvioTerrestre(String codigo, String origen, String destino,
-                         double pesoKg, LocalDate fechaSalida,
-                         String placaVehiculo, double distanciaKm) {
+                          double pesoKg, LocalDate fechaSalida,
+                          Vehiculo vehiculo, double distanciaKm) {
         super(codigo, origen, destino, pesoKg, fechaSalida);
-        this.placaVehiculo = placaVehiculo;
+        this.vehiculo = vehiculo;
         this.distanciaKm = distanciaKm;
-        this.tarifaBase = 2.50;
     }
 
     @Override
     public double calcularCosto() {
-        double costo = (getPesoKg() * 1.8) + (distanciaKm * tarifaBase);
+        double costo = (getPesoKg() * 1.8) + (distanciaKm * TARIFA_BASE);
         setCostoTotal(costo);
         return costo;
     }
 
     @Override
     public String obtenerResumen() {
-        return super.obtenerResumen() + " | Tipo: Terrestre | Placa: " + placaVehiculo;
+        return super.obtenerResumen() + " | Tipo: Terrestre | Placa: " + vehiculo.getPlaca();
     }
 
-    public String getPlacaVehiculo() {
-        return placaVehiculo;
+    public Vehiculo getVehiculo() {
+        return vehiculo;
     }
 
     public double getDistanciaKm() {
