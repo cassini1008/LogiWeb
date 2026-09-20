@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LogiWeb</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+        h1, h2, h3 {
+            color: #0f172a;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #dbe3ee;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        th {
+            background: #e2e8f0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-weight: bold;
+        }
+        .total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #14532d;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>LogiWeb</h1>
+    <h2>Panel de gestión logística</h2>
+
+    <p><strong>Cliente:</strong> <span th:text="${cliente.nombre}">Cliente</span></p>
+    <p><strong>Email:</strong> <span th:text="${cliente.email}">email@dominio.com</span></p>
+
+    <h3>Resumen de envíos</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Código</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Tipo</th>
+            <th>Peso</th>
+            <th>Costo</th>
+            <th>Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="envio : ${envios}">
+            <td th:text="${envio.codigo}">ENV-000</td>
+            <td th:text="${envio.origen}">Origen</td>
+            <td th:text="${envio.destino}">Destino</td>
+            <td>
+                <span class="badge" th:if="${envio instanceof T(com.example.demo.model.EnvioTerrestre)}">Terrestre</span>
+                <span class="badge" th:if="${envio instanceof T(com.example.demo.model.EnvioAereo)}">Aéreo</span>
+            </td>
+            <td th:text="${envio.pesoKg} + ' kg'">0 kg</td>
+            <td th:text="${envio.costoTotal}">0.00</td>
+            <td th:text="${envio.estado}">PENDIENTE</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Total del pedido</h3>
+    <p class="total"><span th:text="${totalPedido}">0.00</span> USD</p>
+</div>
+</body>
+</html>
