@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Nuevo Envío Terrestre</title></head>
+<body>
+<h1>Registrar envío terrestre</h1>
+<form th:action="@{/envio/terrestre/nuevo}" method="post">
+    Código: <input type="text" name="codigo" required><br>
+    Origen: <input type="text" name="origen" required><br>
+    Destino: <input type="text" name="destino" required><br>
+    Peso (kg): <input type="number" step="0.1" name="pesoKg" required><br>
+    Placa: <input type="text" name="placa" required><br>
+    Tipo de vehículo: <input type="text" name="tipoVehiculo" required><br>
+    Capacidad (kg): <input type="number" step="0.1" name="capacidadKg" required><br>
+    Distancia (km): <input type="number" step="0.1" name="distanciaKm" required><br>
+    <button type="submit">Guardar</button>
+</form>
+<a th:href="@{/}">Volver</a>
+</body>
+</html>

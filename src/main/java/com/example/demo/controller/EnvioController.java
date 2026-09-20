@@ -1,19 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Aduana;
-import com.example.demo.model.Cliente;
-import com.example.demo.model.Envio;
-import com.example.demo.model.EnvioAereo;
-import com.example.demo.model.EnvioTerrestre;
-import com.example.demo.model.Pedido;
-import com.example.demo.model.Vehiculo;
+import com.example.demo.model.*;
 import com.example.demo.service.EnvioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Controller
 public class EnvioController {
@@ -26,45 +21,59 @@ public class EnvioController {
 
     @GetMapping("/")
     public String index(Model model) {
-        Cliente cliente = new Cliente(1L, "Ana García", "ana@logiweb.com", "555123456",
-                "Calle 45 #12-30", "Bogotá", "110111");
-
-        Vehiculo vehiculo = new Vehiculo("ABC-123", "Camión", 500);
-
-        EnvioTerrestre terrestre = new EnvioTerrestre(
-                "ENV-1001",
-                "Bogotá",
-                "Medellín",
-                18.5,
-                LocalDate.now(),
-                vehiculo,
-                250
-        );
-
-        Aduana aduana = new Aduana("Estados Unidos", 45.00);
-
-        EnvioAereo aereo = new EnvioAereo(
-                "ENV-2002",
-                "Cali",
-                "Miami",
-                12.0,
-                LocalDate.now(),
-                "AV-770",
-                aduana
-        );
-
-        Pedido pedido = new Pedido(cliente);
-        pedido.agregarEnvio(terrestre);
-        pedido.agregarEnvio(aereo);
-        pedido.agregarPaquete("Documentos", 0.5);
-        pedido.agregarPaquete("Repuestos electrónicos", 3.2);
-
-        List<Envio> envios = pedido.getEnvios();
-
-        model.addAttribute("cliente", cliente);
-        model.addAttribute("envios", envios);
+        Pedido pedido = envioService.getPedidoActual();
+        model.addAttribute("cliente", pedido.getCliente());
+        model.addAttribute("envios", pedido.getEnvios());
         model.addAttribute("totalPedido", envioService.calcularTotalPedido(pedido));
-
         return "index";
+    }
+
+    @GetMapping("/cliente/nuevo")
+    public String formCliente() {
+        return "cliente-form";
+    }
+
+    @PostMapping("/cliente/nuevo")
+    public String crearCliente(@RequestParam String nombre, @RequestParam String email,
+                                @RequestParam String telefono, @RequestParam String calle,
+                                @RequestParam String ciudad, @RequestParam String codigoPostal) {
+        Cliente cliente = new Cliente(System.currentTimeMillis(), nombre, email, telefono,
+                calle, ciudad, codigoPostal);
+        envioService.registrarCliente(cliente);
+        return "redirect:/";
+    }
+
+    @GetMapping("/envio/terrestre/nuevo")
+    public String formTerrestre() {
+        return "envio-terrestre-form";
+    }
+
+    @PostMapping("/envio/terrestre/nuevo")
+    public String crearTerrestre(@RequestParam String codigo, @RequestParam String origen,
+                                  @RequestParam String destino, @RequestParam double pesoKg,
+                                  @RequestParam String placa, @RequestParam String tipoVehiculo,
+                                  @RequestParam double capacidadKg, @RequestParam double distanciaKm) {
+        Vehiculo vehiculo = new Vehiculo(placa, tipoVehiculo, capacidadKg);
+        EnvioTerrestre envio = new EnvioTerrestre(codigo, origen, destino, pesoKg,
+                LocalDate.now(), vehiculo, distanciaKm);
+        envioService.agregarEnvio(envio);
+        return "redirect:/";
+    }
+
+    @GetMapping("/envio/aereo/nuevo")
+    public String formAereo() {
+        return "envio-aereo-form";
+    }
+
+    @PostMapping("/envio/aereo/nuevo")
+    public String crearAereo(@RequestParam String codigo, @RequestParam String origen,
+                              @RequestParam String destino, @RequestParam double pesoKg,
+                              @RequestParam String codigoVuelo, @RequestParam String pais,
+                              @RequestParam double impuesto) {
+        Aduana aduana = new Aduana(pais, impuesto);
+        EnvioAereo envio = new EnvioAereo(codigo, origen, destino, pesoKg,
+                LocalDate.now(), codigoVuelo, aduana);
+        envioService.agregarEnvio(envio);
+        return "redirect:/";
     }
 }

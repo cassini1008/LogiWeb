@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Nuevo Cliente</title></head>
+<body>
+<h1>Registrar nuevo cliente (reinicia el pedido)</h1>
+<form th:action="@{/cliente/nuevo}" method="post">
+    Nombre: <input type="text" name="nombre" required><br>
+    Email: <input type="email" name="email" required><br>
+    Teléfono: <input type="text" name="telefono" required><br>
+    Calle: <input type="text" name="calle" required><br>
+    Ciudad: <input type="text" name="ciudad" required><br>
+    Código Postal: <input type="text" name="codigoPostal" required><br>
+    <button type="submit">Guardar</button>
+</form>
+<a th:href="@{/}">Volver</a>
+</body>
+</html>

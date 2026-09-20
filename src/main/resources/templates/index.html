@@ -53,7 +53,11 @@
 <div class="container">
     <h1>LogiWeb</h1>
     <h2>Panel de gestión logística</h2>
-
+    <p>
+        <a th:href="@{/cliente/nuevo}">Nuevo cliente</a> |
+        <a th:href="@{/envio/terrestre/nuevo}">Nuevo envío terrestre</a> |
+        <a th:href="@{/envio/aereo/nuevo}">Nuevo envío aéreo</a>
+    </p>
     <p><strong>Cliente:</strong> <span th:text="${cliente.nombre}">Cliente</span></p>
     <p><strong>Email:</strong> <span th:text="${cliente.email}">email@dominio.com</span></p>
 
